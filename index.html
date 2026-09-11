@@ -3,32 +3,118 @@ HTML<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hamburgueria Retrô</title>
+  <title>Hamburgueria Retrô - Portfólio & Cardápio</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #121212;
       color: #ffffff;
       text-align: center;
-      padding: 20px;
+    }
+    header {
+      background-color: #1e1e1e;
+      padding: 30px 20px;
+      border-bottom: 3px solid #ff9800;
     }
     h1 {
       color: #ff9800;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-      margin-top: 15px;
-      border: 2px solid #333333;
+    p.subtitle {
+      color: #cccccc;
+      font-size: 1.2rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .capa {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+    .capa img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(255, 152, 0, 0.2);
+      border: 2px solid #333;
+    }
+    .galeria-titulo {
+      color: #ff9800;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .foto-card {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid #333;
+    }
+    .foto-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .foto-card p {
+      margin-top: 10px;
+      color: #ddd;
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
-  <h1>Hamburgueria Retrô</h1>
-  <p>Bem-vindo ao nosso cardápio!</p>
-  
-  <!-- Exibe a imagem enviada para o seu repositório -->
-  <img src="IMG-20260714faixada como.jpg" alt="Fachada da Hamburgueria Retrô">
+
+  <header>
+    <h1>Hamburgueria Retrô</h1>
+    <p class="subtitle">Conheça nossa estrutura e portfólio</p>
+  </header>
+
+  <div class="container">
+    <!-- Capa do Site -->
+    <section class="capa">
+      <img src="IMG-20260714faixada como.jpg" alt="Fachada da Hamburgueria Retrô">
+    </section>
+
+    <!-- Galeria de Fotos / Portfólio -->
+    <h2 class="galeria-titulo">Nossa Galeria</h2>
+    <section class="galeria">
+      
+      <!-- Foto 1 (A fachada principal) -->
+      <div class="foto-card">
+        <img src="IMG-20260714faixada como.jpg" alt="Fachada">
+        <p>Nossa Fachada Retrô</p>
+      </div>
+
+      <!-- Para adicionar mais fotos, basta subir a imagem no GitHub e copiar o bloco abaixo alterando o nome do arquivo -->
+      <!--
+      <div class="foto-card">
+        <img src="NOME_DA_SUA_FOTO.jpg" alt="Descrição">
+        <p>Legenda da Foto</p>
+      </div>
+      -->
+
+    </section>
+  </div>
+
 </body>
 </html>
+  
+  
