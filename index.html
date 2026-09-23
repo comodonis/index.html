@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hamburgueria Retrô - Comodonis</title>
+  <title>Comodonis Hamburgueria - Cardápio & Pedidos</title>
   <style>
     * {
       box-sizing: border-box;
@@ -15,7 +15,7 @@
       background-color: #121212;
       color: #ffffff;
       text-align: center;
-      padding-bottom: 80px;
+      padding-bottom: 150px;
     }
     header {
       background-color: #1e1e1e;
@@ -33,7 +33,7 @@
       margin-top: 5px;
     }
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 20px 15px;
     }
@@ -52,52 +52,175 @@
       text-align: left;
       border-bottom: 2px solid #333;
       padding-bottom: 8px;
-      margin: 30px 0 15px 0;
+      margin: 40px 0 20px 0;
       text-transform: uppercase;
     }
     .cardapio-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 15px;
+      gap: 20px;
     }
     .item-card {
       background: #1e1e1e;
-      border-radius: 8px;
-      padding: 15px;
+      border-radius: 10px;
+      overflow: hidden;
       text-align: left;
       border: 1px solid #333;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+    .item-card:hover {
+      transform: translateY(-4px);
+      border-color: #ff9800;
+    }
+    .item-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background-color: #2a2a2a;
+    }
+    .item-info {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
     }
     .item-card h3 {
       color: #fff;
-      font-size: 1.2rem;
-      margin-bottom: 5px;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
     }
     .item-card p {
       color: #bbb;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    
+    /* OPÇÕES DE PERSONALIZAÇÃO */
+    .secao-opcao {
       margin-bottom: 10px;
+      background: #252525;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #333;
+    }
+    .secao-opcao label.titulo-opcao {
+      font-size: 0.8rem;
+      color: #ff9800;
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .secao-opcao select {
+      width: 100%;
+      padding: 6px;
+      background: #1a1a1a;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .retirar-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .retirar-item {
+      font-size: 0.75rem;
+      color: #ccc;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: #1a1a1a;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .item-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
     }
     .preco {
       color: #ff9800;
       font-weight: bold;
-      font-size: 1.1rem;
-      text-align: right;
+      font-size: 1.05rem;
+    }
+    .btn-add {
+      background-color: #ff9800;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-add:hover {
+      background-color: #e68a00;
+    }
+
+    /* BARRA FIXA DO CARRINHO */
+    .carrinho-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #1e1e1e;
+      border-top: 2px solid #ff9800;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .carrinho-info {
+      text-align: left;
+    }
+    .carrinho-info span {
+      display: block;
+    }
+    .carrinho-total {
+      color: #ff9800;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
     .btn-whatsapp {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
       background-color: #25d366;
       color: white;
       padding: 12px 20px;
-      border-radius: 30px;
+      border-radius: 25px;
       text-decoration: none;
       font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      z-index: 1000;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 15px;
+      font-size: 0.85rem;
+      color: #777;
+    }
+    .contador-box {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 12px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 20px;
+      color: #aaa;
     }
   </style>
 </head>
@@ -109,108 +232,273 @@
   </header>
 
   <div class="container">
-    <img src="IMG-20260714faixada como.jpg" alt="Fachada da Comodonis Hamburgueria" class="fachada-img">
+    <img src="IMG-20260714faixada como.jpg" alt="Comodonis Hamburgueria" class="fachada-img">
 
     <!-- ENTRADAS E PORÇÕES -->
     <h2 class="categoria-titulo">Entradas e Porções</h2>
     <div class="cardapio-grid">
       <div class="item-card">
-        <div>
-          <h3>Fritas (Palito, Rústica ou Crinkle)</h3>
-          <p>Crocantes e deliciosas.</p>
+        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" alt="Fritas" class="item-img">
+        <div class="item-info">
+          <div>
+            <h3>Fritas Indiv. (Palito/Rústica)</h3>
+            <p>Porção individual crocante e deliciosa.</p>
+          </div>
+          <div class="item-bottom">
+            <span class="preco">R$ 14,90</span>
+            <button class="btn-add" onclick="adicionarItemSimples('Fritas Indiv.', 14.90)">+ Adicionar</button>
+          </div>
         </div>
-        <div class="preco">Indiv: R$ 14,90 | G: R$ 38,90</div>
       </div>
+
       <div class="item-card">
-        <div>
-          <h3>Comodonis Best Fries</h3>
-          <p>Cheddar, Muçarela, Parmesão, Tiras de Bacon e Cebola Crispy.</p>
+        <img src="https://images.unsplash.com/photo-1585109649139-366815a0d713?w=400" alt="Comodonis Best Fries" class="item-img">
+        <div class="item-info">
+          <div>
+            <h3>Comodonis Best Fries (Indiv.)</h3>
+            <p>Cheddar, Muçarela, Parmesão, Bacon e Cebola Crispy.</p>
+          </div>
+          <div class="item-bottom">
+            <span class="preco">R$ 24,90</span>
+            <button class="btn-add" onclick="adicionarItemSimples('Best Fries Indiv.', 24.90)">+ Adicionar</button>
+          </div>
         </div>
-        <div class="preco">Indiv: R$ 24,90 | G: R$ 59,90</div>
-      </div>
-      <div class="item-card">
-        <div>
-          <h3>Comodonis Mozzarella Sticks</h3>
-          <p>Pedaços de muçarela empanados e crocantes por fora.</p>
-        </div>
-        <div class="preco">Indiv (4): R$ 22,90 | G (8): R$ 39,90</div>
       </div>
     </div>
 
     <!-- HAMBÚRGUERES ARTESANAIS -->
     <h2 class="categoria-titulo">Hambúrgueres Artesanais</h2>
     <div class="cardapio-grid">
+
+      <!-- COMODONIS 1 -->
       <div class="item-card">
-        <div>
-          <h3>Comodonis 1 (Tradicional X-Salada)</h3>
-          <p>Burger 120g, Queijo, Alface, Tomate, Picles e Molho Especial.</p>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" alt="Comodonis 1" class="item-img">
+        <div class="item-info">
+          <div>
+            <h3>Comodonis 1 (X-Salada)</h3>
+            <p>Burger 120g, Queijo, Alface, Tomate, Picles e Molho Especial.</p>
+          </div>
+          
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Tipo do Pão:</label>
+            <select id="pao-c1">
+              <option value="Pão de Gergelim">Pão de Gergelim (Padrão)</option>
+              <option value="Pão Australiano">Pão Australiano (+ R$ 2,00)</option>
+            </select>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Ponto da Carne:</label>
+            <select id="ponto-c1">
+              <option value="Ao ponto">Ao ponto</option>
+              <option value="Bem passado">Bem passado</option>
+              <option value="Mal passado">Mal passado</option>
+            </select>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Retirar Ingredientes:</label>
+            <div class="retirar-container">
+              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Alface"> Alface</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Tomate"> Tomate</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Picles"> Picles</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Cebola Roxa"> Cebola</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Molho"> Molho</label>
+            </div>
+          </div>
+
+          <div class="item-bottom">
+            <span class="preco">R$ 31,90</span>
+            <button class="btn-add" onclick="adicionarBurgerPersonalizado('Comodonis 1', 31.90, 'pao-c1', 'ponto-c1', 'sem-c1')">+ Adicionar</button>
+          </div>
         </div>
-        <div class="preco">R$ 31,90</div>
       </div>
+
+      <!-- COMODONIS 2 -->
       <div class="item-card">
-        <div>
-          <h3>Comodonis 2 (O Clássico de Bacon)</h3>
-          <p>Burger 120g, Queijo, Bacon, Alface e Molho Especial.</p>
+        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400" alt="Comodonis 2" class="item-img">
+        <div class="item-info">
+          <div>
+            <h3>Comodonis 2 (Bacon)</h3>
+            <p>Burger 120g, Queijo, Bacon crocante, Alface e Molho Especial.</p>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Tipo do Pão:</label>
+            <select id="pao-c2">
+              <option value="Pão de Gergelim">Pão de Gergelim (Padrão)</option>
+              <option value="Pão Australiano">Pão Australiano (+ R$ 2,00)</option>
+            </select>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Ponto da Carne:</label>
+            <select id="ponto-c2">
+              <option value="Ao ponto">Ao ponto</option>
+              <option value="Bem passado">Bem passado</option>
+              <option value="Mal passado">Mal passado</option>
+            </select>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Retirar Ingredientes:</label>
+            <div class="retirar-container">
+              <label class="retirar-item"><input type="checkbox" class="sem-c2" value="Alface"> Alface</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-c2" value="Molho"> Molho</label>
+            </div>
+          </div>
+
+          <div class="item-bottom">
+            <span class="preco">R$ 33,90</span>
+            <button class="btn-add" onclick="adicionarBurgerPersonalizado('Comodonis 2', 33.90, 'pao-c2', 'ponto-c2', 'sem-c2')">+ Adicionar</button>
+          </div>
         </div>
-        <div class="preco">R$ 33,90</div>
       </div>
+
+      <!-- COMODO GIGANTO -->
       <div class="item-card">
-        <div>
-          <h3>Comodonis 3 (O Completo)</h3>
-          <p>Burger 120g, Queijo, Bacon, Ovo, Alface, Tomate, Picles e Molho.</p>
+        <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400" alt="Comodo Giganto" class="item-img">
+        <div class="item-info">
+          <div>
+            <h3>Comodo Giganto</h3>
+            <p>Burger 200g, Duplo Queijo, Bacon em Tiras, Salada e Barbecue.</p>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Tipo do Pão:</label>
+            <select id="pao-cg">
+              <option value="Pão de Gergelim">Pão de Gergelim (Padrão)</option>
+              <option value="Pão Australiano">Pão Australiano (+ R$ 2,00)</option>
+            </select>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Ponto da Carne:</label>
+            <select id="ponto-cg">
+              <option value="Ao ponto">Ao ponto</option>
+              <option value="Bem passado">Bem passado</option>
+              <option value="Mal passado">Mal passado</option>
+            </select>
+          </div>
+
+          <div class="secao-opcao">
+            <label class="titulo-opcao">Retirar Ingredientes:</label>
+            <div class="retirar-container">
+              <label class="retirar-item"><input type="checkbox" class="sem-cg" value="Alface"> Alface</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-cg" value="Tomate"> Tomate</label>
+              <label class="retirar-item"><input type="checkbox" class="sem-cg" value="Barbecue"> Barbecue</label>
+            </div>
+          </div>
+
+          <div class="item-bottom">
+            <span class="preco">R$ 48,90</span>
+            <button class="btn-add" onclick="adicionarBurgerPersonalizado('Comodo Giganto', 48.90, 'pao-cg', 'ponto-cg', 'sem-cg')">+ Adicionar</button>
+          </div>
         </div>
-        <div class="preco">R$ 36,90</div>
       </div>
-      <div class="item-card">
-        <div>
-          <h3>Comodonis Crispy (Pão Australiano)</h3>
-          <p>Burger 120g, Muito Bacon, Onion Crispy, Barbecue e Maionese Heinz.</p>
-        </div>
-        <div class="preco">R$ 38,90</div>
-      </div>
+
     </div>
 
-    <!-- COMODOSSAUROS GG -->
-    <h2 class="categoria-titulo">Comodossauros GG</h2>
-    <div class="cardapio-grid">
-      <div class="item-card">
-        <div>
-          <h3>Comodo Giganto</h3>
-          <p>Burger 200g, Muito Queijo, Tiras de Bacon, Tomate, Alface, Barbecue e Maionese Heinz.</p>
-        </div>
-        <div class="preco">R$ 48,90</div>
+    <footer>
+      <p>© Comodonis Hamburgueria</p>
+      <div class="contador-box">
+        👁️ Visitas no site: <span id="contador-visitas">1</span>
       </div>
-      <div class="item-card">
-        <div>
-          <h3>Comodo T-Rex (Quase 1kg)</h3>
-          <p>300g de Carne (2x 150g), Muito Queijo, 10 Tiras de Bacon, Alface, Tomate, Ovo, Cheddar, Cebola Roxa e Picles.</p>
-        </div>
-        <div class="preco">R$ 69,90</div>
-      </div>
-    </div>
+    </footer>
 
-    <!-- BEBIDAS E MILK SHAKES -->
-    <h2 class="categoria-titulo">Bebidas & Sobremesas</h2>
-    <div class="cardapio-grid">
-      <div class="item-card">
-        <div>
-          <h3>Sodas Italianas</h3>
-          <p>Cranberry, Raspberry, Blackberry, Strawberry, Green Apple e Blue Orange.</p>
-        </div>
-        <div class="preco">R$ 14,90</div>
-      </div>
-      <div class="item-card">
-        <div>
-          <h3>Milk Shakes</h3>
-          <p>Ovomaltine, Sensação, Nutella ou Sabores Tradicionais.</p>
-        </div>
-        <div class="preco">A partir de R$ 26,90</div>
-      </div>
-    </div>
   </div>
 
-  <!-- Botão WhatsApp (Substitua o número abaixo pelo seu) -->
-  <a href="https://wa.me/5511965235613" class="btn-whatsapp" target="_blank">📱 Fazer Pedido no WhatsApp</a>
+  <!-- BARRA DE CARRINHO FIXA NO RODAPÉ -->
+  <div class="carrinho-bar">
+    <div class="carrinho-info">
+      <span id="carrinho-qtd">0 itens selecionados</span>
+      <span class="carrinho-total" id="carrinho-total">Total: R$ 0,00</span>
+    </div>
+    <button class="btn-whatsapp" onclick="enviarPedidoWhatsApp()">📱 Enviar Pedido no WhatsApp</button>
+  </div>
+
+  <script>
+    // ALTERE SEU NÚMERO COM DDD AQUI (ex: 5511987654321)
+    const numeroWhatsApp = "5511999999999";
+
+    let carrinho = [];
+
+    // CONTADOR DE VISITAS
+    let visitas = localStorage.getItem('visitas_comodonis') || 0;
+    visitas = parseInt(visitas) + 1;
+    localStorage.setItem('visitas_comodonis', visitas);
+    document.getElementById('contador-visitas').innerText = visitas;
+
+    function adicionarBurgerPersonalizado(nomeBase, precoBase, paoId, pontoId, semClasse) {
+      const pao = document.getElementById(paoId).value;
+      const ponto = document.getElementById(pontoId).value;
+      
+      let precoFinal = precoBase;
+      if (pao === "Pão Australiano") {
+        precoFinal += 2.00;
+      }
+
+      // Captura os itens marcados para remover
+      const checkboxes = document.querySelectorAll(`.${semClasse}:checked`);
+      let semItens = [];
+      checkboxes.forEach(cb => semItens.push(cb.value));
+
+      let descricaoCompleta = `${nomeBase}\n   • Pão: ${pao}\n   • Ponto: ${ponto}`;
+      if (semItens.length > 0) {
+        descricaoCompleta += `\n   • Sem: ${semItens.join(', ')}`;
+      }
+
+      adicionarAoCarrinho(descricaoCompleta, precoFinal);
+    }
+
+    function adicionarItemSimples(nome, preco) {
+      adicionarAoCarrinho(nome, preco);
+    }
+
+    function adicionarAoCarrinho(nome, preco) {
+      const itemExistente = carrinho.find(item => item.nome === nome);
+      if (itemExistente) {
+        itemExistente.qtd += 1;
+      } else {
+        carrinho.push({ nome: nome, preco: preco, qtd: 1 });
+      }
+      atualizarCarrinho();
+    }
+
+    function atualizarCarrinho() {
+      let totalItens = 0;
+      let valorTotal = 0;
+
+      carrinho.forEach(item => {
+        totalItens += item.qtd;
+        valorTotal += item.preco * item.qtd;
+      });
+
+      document.getElementById('carrinho-qtd').innerText = totalItens + (totalItens === 1 ? ' item selecionado' : ' itens selecionados');
+      document.getElementById('carrinho-total').innerText = 'Total: R$ ' + valorTotal.toFixed(2).replace('.', ',');
+    }
+
+    function enviarPedidoWhatsApp() {
+      if (carrinho.length === 0) {
+        alert('Seu carrinho está vazio! Selecione ao menos um item antes de enviar.');
+        return;
+      }
+
+      let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
+      let valorTotal = 0;
+
+      carrinho.forEach(item => {
+        let subtotal = item.preco * item.qtd;
+        valorTotal += subtotal;
+        mensagem += `*${item.qtd}x ${item.nome}* - R$ ${subtotal.toFixed(2).replace('.', ',')}\n\n`;
+      });
+
+      mensagem += `*Total do Pedido:* R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+
+      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank');
+    }
+  </script>
 
 </body>
 </html>
