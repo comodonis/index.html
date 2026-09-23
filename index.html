@@ -1,504 +1,336 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comodonis Hamburgueria - Cardápio & Pedidos</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #ffffff;
-      text-align: center;
-      padding-bottom: 150px;
-    }
-    header {
-      background-color: #1e1e1e;
-      padding: 25px 15px;
-      border-bottom: 3px solid #ff9800;
-    }
-    h1 {
-      color: #ff9800;
-      font-size: 2.2rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    p.sub {
-      color: #aaa;
-      margin-top: 5px;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px 15px;
-    }
-    .fachada-img {
-      width: 100%;
-      max-height: 400px;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(255, 152, 0, 0.2);
-      border: 2px solid #333;
-      margin-bottom: 30px;
-    }
-    .categoria-titulo {
-      color: #ff9800;
-      font-size: 1.6rem;
-      text-align: left;
-      border-bottom: 2px solid #333;
-      padding-bottom: 8px;
-      margin: 40px 0 20px 0;
-      text-transform: uppercase;
-    }
-    .cardapio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .item-card {
-      background: #1e1e1e;
-      border-radius: 10px;
-      overflow: hidden;
-      text-align: left;
-      border: 1px solid #333;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s ease;
-    }
-    .item-card:hover {
-      transform: translateY(-4px);
-      border-color: #ff9800;
-    }
-    .item-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background-color: #2a2a2a;
-    }
-    .item-info {
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      justify-content: space-between;
-    }
-    .item-card h3 {
-      color: #fff;
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-    }
-    .item-card p {
-      color: #bbb;
-      font-size: 0.85rem;
-      line-height: 1.3;
-      margin-bottom: 12px;
-    }
-    
-    /* OPÇÕES DE PERSONALIZAÇÃO */
-    .secao-opcao {
-      margin-bottom: 10px;
-      background: #252525;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #333;
-    }
-    .secao-opcao label.titulo-opcao {
-      font-size: 0.8rem;
-      color: #ff9800;
-      display: block;
-      margin-bottom: 4px;
-      font-weight: bold;
-    }
-    .secao-opcao select {
-      width: 100%;
-      padding: 6px;
-      background: #1a1a1a;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 4px;
-      font-size: 0.85rem;
-    }
-    .retirar-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .retirar-item {
-      font-size: 0.75rem;
-      color: #ccc;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      background: #1a1a1a;
-      padding: 3px 6px;
-      border-radius: 4px;
-    }
-
-    .item-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-    }
-    .preco {
-      color: #ff9800;
-      font-weight: bold;
-      font-size: 1.05rem;
-    }
-    .btn-add {
-      background-color: #ff9800;
-      color: #000;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-add:hover {
-      background-color: #e68a00;
-    }
-
-    /* BARRA FIXA DO CARRINHO */
-    .carrinho-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #1e1e1e;
-      border-top: 2px solid #ff9800;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-      z-index: 1000;
-    }
-    .carrinho-info {
-      text-align: left;
-    }
-    .carrinho-info span {
-      display: block;
-    }
-    .carrinho-total {
-      color: #ff9800;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-    .btn-whatsapp {
-      background-color: #25d366;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    footer {
-      margin-top: 40px;
-      padding: 15px;
-      font-size: 0.85rem;
-      color: #777;
-    }
-    .contador-box {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 4px 12px;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 20px;
-      color: #aaa;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comodonis Hamburgueria - Cardápio & Pedidos</title>
+    <style>
+        :root {
+            --primary: #990000;
+            --secondary: #ffcc00;
+            --dark: #1a1a1a;
+            --light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            padding-bottom: 80px;
+        }
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 30px 15px;
+            border-bottom: 5px solid var(--secondary);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        header p {
+            font-size: 1rem;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            border-left: 5px solid var(--secondary);
+            padding-left: 10px;
+            margin: 30px 0 15px 0;
+            text-transform: uppercase;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #5c3a21;
+            color: var(--white);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        .card-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .custom-group {
+            margin-bottom: 12px;
+            border-top: 1px dashed #eee;
+            padding-top: 8px;
+        }
+        .custom-label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 5px;
+            display: block;
+        }
+        .select-input {
+            width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 0.85rem;
+            background-color: var(--white);
+        }
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+        .checkbox-label {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .card-bottom {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        .price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        .btn-add {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-add:hover {
+            background-color: #770000;
+        }
+        
+        /* Barra do Carrinho Fixa */
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .cart-info h4 {
+            font-size: 1.1rem;
+            color: var(--secondary);
+        }
+        .btn-view-cart {
+            background-color: var(--secondary);
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* Modal do Carrinho */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 15px;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .modal-header h3 {
+            color: var(--primary);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .cart-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-title {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .cart-item-details {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 4px 0;
+        }
+        .cart-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-qty {
+            background-color: #ddd;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-submit-order {
+            background-color: #25d366;
+            color: var(--white);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>Comodonis Hamburgueria</h1>
-    <p class="sub">1ª Hamburgueria de Embu-Guaçu - Desde 2013</p>
-  </header>
+    <header>
+        <h1>Comodonis Hamburgueria</h1>
+        <p>1ª Hamburgueria de Embu-Guaçu - Desde 2013</p>
+    </header>
 
-  <div class="container">
-    <img src="IMG-20260714faixada como.jpg" alt="Comodonis Hamburgueria" class="fachada-img">
-
-    <!-- ENTRADAS E PORÇÕES -->
-    <h2 class="categoria-titulo">Entradas e Porções</h2>
-    <div class="cardapio-grid">
-      <div class="item-card">
-        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" alt="Fritas" class="item-img">
-        <div class="item-info">
-          <div>
-            <h3>Fritas Indiv. (Palito/Rústica)</h3>
-            <p>Porção individual crocante e deliciosa.</p>
-          </div>
-          <div class="item-bottom">
-            <span class="preco">R$ 14,90</span>
-            <button class="btn-add" onclick="adicionarItemSimples('Fritas Indiv.', 14.90)">+ Adicionar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="item-card">
-        <img src="https://images.unsplash.com/photo-1585109649139-366815a0d713?w=400" alt="Comodonis Best Fries" class="item-img">
-        <div class="item-info">
-          <div>
-            <h3>Comodonis Best Fries (Indiv.)</h3>
-            <p>Cheddar, Muçarela, Parmesão, Bacon e Cebola Crispy.</p>
-          </div>
-          <div class="item-bottom">
-            <span class="preco">R$ 24,90</span>
-            <button class="btn-add" onclick="adicionarItemSimples('Best Fries Indiv.', 24.90)">+ Adicionar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HAMBÚRGUERES ARTESANAIS -->
-    <h2 class="categoria-titulo">Hambúrgueres Artesanais</h2>
-    <div class="cardapio-grid">
-
-      <!-- COMODONIS 1 -->
-      <div class="item-card">
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" alt="Comodonis 1" class="item-img">
-        <div class="item-info">
-          <div>
-            <h3>Comodonis 1 (X-Salada)</h3>
-            <p>Burger 120g, Queijo, Alface, Tomate, Picles e Molho Especial.</p>
-          </div>
-          
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Tipo do Pão:</label>
-            <select id="pao-c1">
-              <option value="Pão de Gergelim">Pão de Gergelim (Padrão)</option>
-              <option value="Pão Australiano">Pão Australiano (+ R$ 2,00)</option>
-            </select>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Ponto da Carne:</label>
-            <select id="ponto-c1">
-              <option value="Ao ponto">Ao ponto</option>
-              <option value="Bem passado">Bem passado</option>
-              <option value="Mal passado">Mal passado</option>
-            </select>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Retirar Ingredientes:</label>
-            <div class="retirar-container">
-              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Alface"> Alface</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Tomate"> Tomate</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Picles"> Picles</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Cebola Roxa"> Cebola</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-c1" value="Molho"> Molho</label>
+    <div class="container">
+        
+        <!-- PORÇÕES -->
+        <div class="section-title">Entradas e Porções</div>
+        <div class="grid">
+            <div class="card">
+                <div>
+                    <div class="card-title">Fritas Individual</div>
+                    <div class="card-desc">Porção individual crocante e deliciosa. Opções: Palito ou Rústica.</div>
+                </div>
+                <div class="card-bottom">
+                    <span class="price">R$ 14,90</span>
+                    <button class="btn-add" onclick="addPortionToCart('Fritas Individual', 14.90)">+ Adicionar</button>
+                </div>
             </div>
-          </div>
-
-          <div class="item-bottom">
-            <span class="preco">R$ 31,90</span>
-            <button class="btn-add" onclick="adicionarBurgerPersonalizado('Comodonis 1', 31.90, 'pao-c1', 'ponto-c1', 'sem-c1')">+ Adicionar</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- COMODONIS 2 -->
-      <div class="item-card">
-        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400" alt="Comodonis 2" class="item-img">
-        <div class="item-info">
-          <div>
-            <h3>Comodonis 2 (Bacon)</h3>
-            <p>Burger 120g, Queijo, Bacon crocante, Alface e Molho Especial.</p>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Tipo do Pão:</label>
-            <select id="pao-c2">
-              <option value="Pão de Gergelim">Pão de Gergelim (Padrão)</option>
-              <option value="Pão Australiano">Pão Australiano (+ R$ 2,00)</option>
-            </select>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Ponto da Carne:</label>
-            <select id="ponto-c2">
-              <option value="Ao ponto">Ao ponto</option>
-              <option value="Bem passado">Bem passado</option>
-              <option value="Mal passado">Mal passado</option>
-            </select>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Retirar Ingredientes:</label>
-            <div class="retirar-container">
-              <label class="retirar-item"><input type="checkbox" class="sem-c2" value="Alface"> Alface</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-c2" value="Molho"> Molho</label>
+            <div class="card">
+                <div>
+                    <div class="card-title">Comodonis Best Fries (Indiv.)</div>
+                    <div class="card-desc">Cheddar, Muçarela, Parmesão, Bacon e Cebola Crispy.</div>
+                </div>
+                <div class="card-bottom">
+                    <span class="price">R$ 24,90</span>
+                    <button class="btn-add" onclick="addPortionToCart('Comodonis Best Fries (Indiv.)', 24.90)">+ Adicionar</button>
+                </div>
             </div>
-          </div>
-
-          <div class="item-bottom">
-            <span class="preco">R$ 33,90</span>
-            <button class="btn-add" onclick="adicionarBurgerPersonalizado('Comodonis 2', 33.90, 'pao-c2', 'ponto-c2', 'sem-c2')">+ Adicionar</button>
-          </div>
         </div>
-      </div>
 
-      <!-- COMODO GIGANTO -->
-      <div class="item-card">
-        <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400" alt="Comodo Giganto" class="item-img">
-        <div class="item-info">
-          <div>
-            <h3>Comodo Giganto</h3>
-            <p>Burger 200g, Duplo Queijo, Bacon em Tiras, Salada e Barbecue.</p>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Tipo do Pão:</label>
-            <select id="pao-cg">
-              <option value="Pão de Gergelim">Pão de Gergelim (Padrão)</option>
-              <option value="Pão Australiano">Pão Australiano (+ R$ 2,00)</option>
-            </select>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Ponto da Carne:</label>
-            <select id="ponto-cg">
-              <option value="Ao ponto">Ao ponto</option>
-              <option value="Bem passado">Bem passado</option>
-              <option value="Mal passado">Mal passado</option>
-            </select>
-          </div>
-
-          <div class="secao-opcao">
-            <label class="titulo-opcao">Retirar Ingredientes:</label>
-            <div class="retirar-container">
-              <label class="retirar-item"><input type="checkbox" class="sem-cg" value="Alface"> Alface</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-cg" value="Tomate"> Tomate</label>
-              <label class="retirar-item"><input type="checkbox" class="sem-cg" value="Barbecue"> Barbecue</label>
-            </div>
-          </div>
-
-          <div class="item-bottom">
-            <span class="preco">R$ 48,90</span>
-            <button class="btn-add" onclick="adicionarBurgerPersonalizado('Comodo Giganto', 48.90, 'pao-cg', 'ponto-cg', 'sem-cg')">+ Adicionar</button>
-          </div>
-        </div>
-      </div>
+        <!-- HAMBÚRGUERES -->
+        <div class="section-title">Hambúrgueres Artesanais</div>
+        <div class="grid" id="burgers-grid"></div>
 
     </div>
 
-    <footer>
-      <p>© Comodonis Hamburgueria</p>
-      <div class="contador-box">
-        👁️ Visitas no site: <span id="contador-visitas">1</span>
-      </div>
-    </footer>
-
-  </div>
-
-  <!-- BARRA DE CARRINHO FIXA NO RODAPÉ -->
-  <div class="carrinho-bar">
-    <div class="carrinho-info">
-      <span id="carrinho-qtd">0 itens selecionados</span>
-      <span class="carrinho-total" id="carrinho-total">Total: R$ 0,00</span>
+    <!-- BARRA FIXA DO CARRINHO -->
+    <div class="cart-bar">
+        <div class="cart-info">
+            <h4 id="cart-summary">Seu Carrinho está vazio</h4>
+        </div>
+        <button class="btn-view-cart" onclick="toggleModal(true)">Ver Carrinho</button>
     </div>
-    <button class="btn-whatsapp" onclick="enviarPedidoWhatsApp()">📱 Enviar Pedido no WhatsApp</button>
-  </div>
 
-  <script>
-    // ALTERE SEU NÚMERO COM DDD AQUI (ex: 5511965235613)
-    const numeroWhatsApp = "5511965235613";
-
-    let carrinho = [];
-
-    // CONTADOR DE VISITAS
-    let visitas = localStorage.getItem('visitas_comodonis') || 0;
-    visitas = parseInt(visitas) + 1;
-    localStorage.setItem('visitas_comodonis', visitas);
-    document.getElementById('contador-visitas').innerText = visitas;
-
-    function adicionarBurgerPersonalizado(nomeBase, precoBase, paoId, pontoId, semClasse) {
-      const pao = document.getElementById(paoId).value;
-      const ponto = document.getElementById(pontoId).value;
-      
-      let precoFinal = precoBase;
-      if (pao === "Pão Australiano") {
-        precoFinal += 2.00;
-      }
-
-      // Captura os itens marcados para remover
-      const checkboxes = document.querySelectorAll(`.${semClasse}:checked`);
-      let semItens = [];
-      checkboxes.forEach(cb => semItens.push(cb.value));
-
-      let descricaoCompleta = `${nomeBase}\n   • Pão: ${pao}\n   • Ponto: ${ponto}`;
-      if (semItens.length > 0) {
-        descricaoCompleta += `\n   • Sem: ${semItens.join(', ')}`;
-      }
-
-      adicionarAoCarrinho(descricaoCompleta, precoFinal);
-    }
-
-    function adicionarItemSimples(nome, preco) {
-      adicionarAoCarrinho(nome, preco);
-    }
-
-    function adicionarAoCarrinho(nome, preco) {
-      const itemExistente = carrinho.find(item => item.nome === nome);
-      if (itemExistente) {
-        itemExistente.qtd += 1;
-      } else {
-        carrinho.push({ nome: nome, preco: preco, qtd: 1 });
-      }
-      atualizarCarrinho();
-    }
-
-    function atualizarCarrinho() {
-      let totalItens = 0;
-      let valorTotal = 0;
-
-      carrinho.forEach(item => {
-        totalItens += item.qtd;
-        valorTotal += item.preco * item.qtd;
-      });
-
-      document.getElementById('carrinho-qtd').innerText = totalItens + (totalItens === 1 ? ' item selecionado' : ' itens selecionados');
-      document.getElementById('carrinho-total').innerText = 'Total: R$ ' + valorTotal.toFixed(2).replace('.', ',');
-    }
-
-    function enviarPedidoWhatsApp() {
-      if (carrinho.length === 0) {
-        alert('Seu carrinho está vazio! Selecione ao menos um item antes de enviar.');
-        return;
-      }
-
-      let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
-      let valorTotal = 0;
-
-      carrinho.forEach(item => {
-        let subtotal = item.preco * item.qtd;
-        valorTotal += subtotal;
-        mensagem += `*${item.qtd}x ${item.nome}* - R$ ${subtotal.toFixed(2).replace('.', ',')}\n\n`;
-      });
-
-      mensagem += `*Total do Pedido:* R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
-
-      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-      window.open(url, '_blank');
-    }
-  </script>
-
-</body>
-</html>
+    <!-- MODAL DO CARRINHO -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Seu Pedido</h3>
+                <button class="close-modal" onclick="toggleModal(false)">&times;</button>
+            </div>
+            <div id="cart-items-container"></div>
