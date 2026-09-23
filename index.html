@@ -22,7 +22,7 @@
         body {
             background-color: var(--light);
             color: var(--dark);
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
         header {
             background-color: var(--primary);
@@ -52,8 +52,9 @@
             color: var(--primary);
             border-left: 5px solid var(--secondary);
             padding-left: 10px;
-            margin: 30px 0 15px 0;
+            margin: 35px 0 15px 0;
             text-transform: uppercase;
+            font-weight: bold;
         }
         .grid {
             display: grid;
@@ -87,6 +88,7 @@
             font-weight: bold;
             margin-bottom: 5px;
             color: var(--primary);
+            padding-right: 90px;
         }
         .card-desc {
             font-size: 0.9rem;
@@ -113,6 +115,7 @@
             border: 1px solid #ccc;
             font-size: 0.85rem;
             background-color: var(--white);
+            margin-bottom: 8px;
         }
         .checkbox-grid {
             display: grid;
@@ -152,8 +155,6 @@
         .btn-add:hover {
             background-color: #770000;
         }
-        
-        /* Barra do Carrinho Fixa */
         .cart-bar {
             position: fixed;
             bottom: 0;
@@ -181,8 +182,6 @@
             font-weight: bold;
             cursor: pointer;
         }
-        
-        /* Modal do Carrinho */
         .modal {
             position: fixed;
             top: 0;
@@ -287,30 +286,9 @@
 
     <div class="container">
         
-        <!-- PORÇÕES -->
+        <!-- ENTRADAS E PORÇÕES -->
         <div class="section-title">Entradas e Porções</div>
-        <div class="grid">
-            <div class="card">
-                <div>
-                    <div class="card-title">Fritas Individual</div>
-                    <div class="card-desc">Porção individual crocante e deliciosa. Opções: Palito ou Rústica.</div>
-                </div>
-                <div class="card-bottom">
-                    <span class="price">R$ 14,90</span>
-                    <button class="btn-add" onclick="addPortionToCart('Fritas Individual', 14.90)">+ Adicionar</button>
-                </div>
-            </div>
-            <div class="card">
-                <div>
-                    <div class="card-title">Comodonis Best Fries (Indiv.)</div>
-                    <div class="card-desc">Cheddar, Muçarela, Parmesão, Bacon e Cebola Crispy.</div>
-                </div>
-                <div class="card-bottom">
-                    <span class="price">R$ 24,90</span>
-                    <button class="btn-add" onclick="addPortionToCart('Comodonis Best Fries (Indiv.)', 24.90)">+ Adicionar</button>
-                </div>
-            </div>
-        </div>
+        <div class="grid" id="portions-grid"></div>
 
         <!-- HAMBÚRGUERES -->
         <div class="section-title">Hambúrgueres Artesanais</div>
@@ -334,3 +312,19 @@
                 <button class="close-modal" onclick="toggleModal(false)">&times;</button>
             </div>
             <div id="cart-items-container"></div>
+            <div style="margin-top: 20px; font-size: 1.2rem; font-weight: bold; text-align: right;" id="modal-total">
+                Total: R$ 0,00
+            </div>
+            <button class="btn-submit-order" onclick="sendWhatsAppOrder()">
+                Enviar Pedido no WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // TODOS OS LANCHES DO CARDÁPIO INCLUSOS
+        const burgersData = [
+            { id: "comodinho", title: "Comodinho (Kids)", desc: "Burger 60g, Queijo, Alface e Molho Especial.", basePrice: 19.90, paoPadrao: "Gergelim", customizavel: true },
+            { id: "comodonis_x", title: "Comodonis X-Cheese Burger", desc: "Burger 120g, Queijo derretendo e Molho Especial.", basePrice: 29.90, paoPadrao: "Gergelim", customizavel: true },
+            { id: "comodonis1", title: "Comodonis 1 (Tradicional X-Salada)", desc: "Burger 120g, Queijo, Alface, Tomate, Picles e Molho Especial.", basePrice: 31.90, paoPadrao: "Gergelim", customizavel: true },
+
