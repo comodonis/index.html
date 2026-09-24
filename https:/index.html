@@ -1,1 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comodonis Hamburgueria - Cardápio & Pedidos</title>
+  <style>
+    :root {
+      --primary-color: #8b0000;
+      --secondary-color: #ffcc00;
+      --dark-bg: #111;
+      --light-bg: #f9f9f9;
+    }
 
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
+      color: #333;
+      padding-bottom: 80px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      border-bottom: 4px solid var(--secondary-color);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 0.9rem;
+      color: var(--secondary-color);
+    }
+
+    main {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      border-left: 5px solid var(--secondary-color);
+      padding-left: 10px;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-info h3 {
+      margin: 0 0 5px 0;
+      font-size: 1.1rem;
+    }
+
+    .item-description {
+      margin: 0 0 8px 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .item-price {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .btn-add {
+      background-color: var(--secondary-color);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cart-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--dark-bg);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      box-sizing: border-box;
+    }
+
+    .btn-cart {
+      background-color: var(--secondary-color);
+      color: black;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>COMODONIS HAMBURGUERIA</h1>
+    <p>1ª Hamburgueria de Embu-Guaçu - Desde 2013</p>
+  </header>
+
+  <main>
+    <div class="section-title">Entradas e Porções</div>
+    <div id="entradas-container" class="menu-grid"></div>
+
+    <div class="section-title">Hambúrgueres Artesanais</div>
+    <div id="hamburgueres-container" class="menu-grid"></div>
+  </main>
+
+  <div class="cart-bar">
+    <span id="cart-status">Seu Carrinho está vazio</span>
+    <button class="btn-cart">Ver Carrinho</button>
+  </div>
+
+  <script>
+    // Dados dos produtos com nomes, descrições e preços
+    const cardapio = [
+      {
+        categoria: "entradas",
+        nome: "Batata Frita Rústica",
+        descricao: "Porção de batatas rústicas temperadas com alecrim e páprica, acompanhadas de maionese da casa.",
+        preco: 22.00
+      },
+      {
+        categoria: "entradas",
+        nome: "Onion Rings",
+        descricao: "Anéis de cebola empanados e crocantes com molho barbecue.",
+        preco: 24.00
+      },
+      {
+        categoria: "hamburgueres",
+        nome: "Comodonis Classic",
+        descricao: "Pão artesanal, hambúrguer de 180g, queijo prato, alface, tomate e maionese especial.",
+        preco: 32.00
+      },
+      {
+        categoria: "hamburgueres",
+        nome: "Bacon Smash",
+        descricao: "Pão brioche, 2x smash burger de 90g, queijo cheddar duplo, muito bacon crocante e molho da casa.",
+        preco: 36.00
+      }
+    ];
+
+    // Função para renderizar os itens na tela
+    function renderizarCardapio() {
+      const entradasContainer = document.getElementById('entradas-container');
+      const hamburgueresContainer = document.getElementById('hamburgueres-container');
+
+      cardapio.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'menu-card';
+        itemElement.innerHTML = `
+          <div class="item-info">
+            <h3>${item.nome}</h3>
+            <p class="item-description">${item.descricao}</p>
+            <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+          </div>
+          <button class="btn-add">Adicionar</button>
+        `;
+
+        if (item.categoria === 'entradas') {
+          entradasContainer.appendChild(itemElement);
+        } else if (item.categoria === 'hamburgueres') {
+          hamburgueresContainer.appendChild(itemElement);
+        }
+      });
+    }
+
+    // Executa ao carregar a página
+    document.addEventListener('DOMContentLoaded', renderizarCardapio);
+  </script>
+</body>
+</html>
