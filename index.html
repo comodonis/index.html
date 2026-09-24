@@ -1,1 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comodonis Hamburgueria - Cardápio & Pedidos</title>
+  <style>
+    :root {
+      --primary: #8b0000;
+      --secondary: #ffcc00;
+      --dark: #111111;
+      --light: #f4f4f4;
+      --white: #ffffff;
+      --shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background-color: var(--light); color: var(--dark); padding-bottom: 120px; }
+    
+    header {
+      background-color: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 20px 15px;
+      border-bottom: 5px solid var(--secondary);
+    }
+    header h1 { font-size: 2rem; text-transform: uppercase; margin-bottom: 5px; }
+    header p { font-size: 1rem; color: var(--secondary); font-weight: bold; }
 
+    .container { max-width: 900px; margin: 0 auto; padding: 20px 15px; }
+    .section-title {
+      font-size: 1.4rem;
+      color: var(--primary);
+      border-left: 5px solid var(--secondary);
+      padding-left: 10px;
+      margin: 30px 0 15px 0;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+    .card {
+      background-color: var(--white);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 6px; color: var(--primary); }
+    .card-desc { font-size: 0.85rem; color: #555; margin-bottom: 12px; line-height: 1.3; flex-grow: 1; }
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+    .price { font-size: 1.1rem; font-weight: bold; color: #2e7d32; }
+    .btn-add {
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-add:hover { background-color: #770000; }
+
+    /* Barra Fixa do Carrinho */
+    .cart-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background-color: var(--dark);
+      color: var(--white);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    .btn-view-cart {
+      background-color: var(--secondary);
+      color: var(--dark);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Modais */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      color: #333;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .modal-header h2 { color: var(--primary); margin: 0; font-size: 1.2rem; }
+    .close-btn { font-size: 1.5rem; cursor: pointer; font-weight: bold; }
+
+    /* Opções de Customização */
+    .custom-group { margin-bottom: 15px; }
+    .custom-group label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; }
+    .custom-group select, .custom-group input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .checkbox-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .checkbox-list label { font-weight: normal; font-size: 0.88rem; cursor: pointer; }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .cart-item-details { max-width: 70%; }
+    .cart-item-customs { font-size: 0.78rem; color: #666; margin-top: 3px; }
+    .btn-remove {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .obs-box { margin-top: 15px; }
+    .obs-box textarea {
+      width: 100%;
+      height: 70px;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      resize: none;
+      margin-top: 5px;
+    }
+    .total-box { font-size: 1.2rem; font-weight: bold; text-align: right; margin: 15px 0; color: #2e7d32; }
+    .btn-send {
+      background: #25d366;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Comodonis Hamburgueria</h1>
+    <p>1ª Hamburgueria de Embu-Guaçu - Desde 2013</p>
+  </header>
+
+  <div class="container">
+    <div class="section-title">Hambúrgueres Artesanais - Kids & Classic G</div>
+    <div class="grid" id="burgers-g-grid"></div>
+
+    <div class="section-title">Comodossauros GG (Pão com Gergelim G)</div>
+    <div class="grid" id="comodossauros-grid"></div>
+
+    <div class="section-title">Special Burgers - G (Pão com Gergelim)</div>
+    <div class="grid" id="special-burgers-grid"></div>
+
+    <div class="section-title">Entradas & Batatas</div>
+    <div class="grid" id="entradas-grid"></div>
+
+    <div class="section-title">Porções Artesanais</div>
+    <div class="grid" id="porcoes-artesanais-grid"></div>
+
+    <div class="section-title">Lanche no Prato</div>
+    <div class="grid" id="lanche-prato-grid"></div>
+
+    <div class="section-title">Molhos Extra (Pote 50ml)</div>
+    <div class="grid" id="molhos-grid"></div>
+
+    <div class="section-title">Extras & Adicionais</div>
+    <div class="grid" id="extras-grid"></div>
+  </div>
+
+  <div class="cart-bar">
+    <div id="cart-summary">Carrinho vazio</div>
+    <button class="btn-view-cart" onclick="toggleCartModal(true)">Ver Carrinho</button>
+  </div>
+
+  <!-- MODAL DE PERSONALIZAÇÃO -->
+  <div class="modal" id="custom-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="custom-title">Personalizar Lanche</h2>
+        <span class="close-btn" onclick="closeCustomModal()">&times;</span>
+      </div>
+
+      <!-- Ponto da carne -->
+      <div class="custom-group" id="group-ponto">
+        <label>Ponto da Carne:</label>
+        <select id="select-ponto">
+          <option value="Ao Ponto">Ao Ponto (Sugerido)</option>
+          <option value="Ao Ponto para Bem Passado">Ao Ponto para Bem Passado</option>
+          <option value="Bem Passado">Bem Passado</option>
+          <option value="Mal Passado">Mal Passado</option>
+        </select>
+      </div>
+
+      <!-- Troca do Pão -->
+      <div class="custom-group" id="group-pao">
+        <label>Escolha o Pão:</label>
+        <select id="select-pao">
+          <option value="Pão com Gergelim">Pão com Gergelim</option>
+          <option value="Pão Australiano (+ R$ 3,90)">Pão Australiano (+ R$ 3,90)</option>
+        </select>
+      </div>
+
+      <!-- Remoção de Ingredientes -->
+      <div class="custom-group" id="group-remocao">
+        <label>Retirar Ingredientes:</label>
+        <div class="checkbox-list">
+          <label><input type="checkbox" value="Sem Molho Especial"> Sem Molho</label>
+          <label><input type="checkbox" value="Sem Alface"> Sem Alface</label>
+          <label><input type="checkbox" value="Sem Tomate"> Sem Tomate</label>
+          <label><input type="checkbox" value="Sem Picles"> Sem Picles</label>
+          <label><input type="checkbox" value="Sem Cebola Roxa"> Sem Cebola</label>
+          <label><input type="checkbox" value="Sem Bacon"> Sem Bacon</label>
+        </div>
+      </div>
+
+      <button class="btn-send" style="background-color: var(--primary);" onclick="confirmAddCustom()">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+
+  <!-- MODAL DO CARRINHO -->
+  <div class="modal" id="cart-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Seu Pedido</h2>
+        <span class="close-btn" onclick="toggleCartModal(false)">&times;</span>
+      </div>
+      <div id="cart-items-container"></div>
+      <div class="obs-box">
+        <label for="obs"><strong>Observações do Pedido:</strong></label>
+        <textarea id="obs" placeholder="Ex: Entregar sem campainha, troco para 100, etc."></textarea>
+      </div>
+      <div class="total-box" id="cart-total">Total: R$ 0,00</div>
+      <button class="btn-send" onclick="sendWhatsAppOrder()">Enviar Pedido no WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    const WHATSAPP_NUMBER = "5511965235613";
+
+    const cardapio = [
+      // HAMBÚRGUERES ARTESANAIS - KIDS & CLASSIC G
+      { cat: "burgers-g", nome: "COMODINHO", desc: "Burger 60g, queijo, alface e molho especial.", preco: 19.90, customizable: true },
+      { cat: "burgers-g", nome: "COMODONIS X-CHEESE BURGER", desc: "Burger 120g, queijo derretendo e molho especial.", preco: 29.90, customizable: true },
+      { cat: "burgers-g", nome: "COMODONIS 1 (TRADICIONAL X-SALADA)", desc: "Burger 120g, queijo, alface, tomate, picles e molho especial.", preco: 31.90, customizable: true },
+      { cat: "burgers-g", nome: "COMODONIS 2 (CLÁSSICO DE BACON)", desc: "Burger 120g, queijo, bacon, alface e molho especial.", preco: 33.90, customizable: true },
+      { cat: "burgers-g", nome: "COMODONIS 3 (NA DÚVIDA, UM COMPLETO)", desc: "Burger 120g, queijo, bacon, ovo, alface, tomate, picles e molho especial.", preco: 36.90, customizable: true },
+      { cat: "burgers-g", nome: "COMODONIS RINGS", desc: "Deliciosas onion rings, burger de 120g, muito queijo, bacon regados c/ barbecue e maionese Heinz, alface no pão australiano.", preco: 38.90, customizable: true },
+      { cat: "burgers-g", nome: "COMODONIS CRISPY", desc: "Para apaixonados por cheddar, muito bacon e onion crispy. Burger 120g, barbecue e maionese Heinz no pão australiano.", preco: 38.90, customizable: true },
+      
+      // COMODOSSAUROS GG
+      { cat: "comodossauros", nome: "COMODO DUPLO X", desc: "2 Burgers 120g, 2x queijo, tiras de bacon, alface, tomate, cebola roxa, picles, ovo e molho especial.", preco: 54.90, customizable: true },
+      { cat: "comodossauros", nome: "COMODO GIGANTO", desc: "Burger 200g, muito queijo, tiras de bacon, tomate, alface, barbecue Heinz e maionese Heinz.", preco: 48.90, customizable: true },
+      { cat: "comodossauros", nome: "COMODO TRODONTE", desc: "Burger 200g, muito queijo, ovo, alface, picles, cebola roxa e molho especial.", preco: 48.90, customizable: true },
+      { cat: "comodossauros", nome: "COMODO T-REX", desc: "300g de carne (2 burgers 150g), muito queijo, 10 tiras de bacon, alface, tomate, ovo, molho especial, cheddar, cebola roxa e picles.", preco: 69.90, customizable: true },
+
+      // SPECIAL BURGERS - G
+      { cat: "special-burgers", nome: "COMODONIS CHICKEN", desc: "Burger 100% peito de frango, queijo, cheddar, alface, tomate, picles, cebola roxa e molho especial.", preco: 33.90, customizable: true },
+      { cat: "special-burgers", nome: "COMODONIS CROC CROC", desc: "Burger 100% peito de frango bem temperado, empanamento americano, queijo cheddar, bacon, alface e molho especial.", preco: 38.90, customizable: true },
+      { cat: "special-burgers", nome: "COMODONIS VEGGIE", desc: "Burger de vegetais, queijo, cheddar, cebola roxa, alface, tomate e molho especial.", preco: 39.90, customizable: true },
+
+      // ENTRADAS & BATATAS
+      { cat: "entradas", nome: "FRIES PALITO (INDIVIDUAL)", desc: "Deliciosas, sequinhas e crocantes.", preco: 14.90 },
+      { cat: "entradas", nome: "FRIES PALITO (G)", desc: "Deliciosas, sequinhas e crocantes.", preco: 38.90 },
+      { cat: "entradas", nome: "BATATA RÚSTICA (INDIVIDUAL)", desc: "Crocante por fora e macia por dentro.", preco: 14.90 },
+      { cat: "entradas", nome: "BATATA RÚSTICA (G)", desc: "Crocante por fora e macia por dentro.", preco: 38.90 },
+      { cat: "entradas", nome: "BATATA CRINKLE (INDIVIDUAL)", desc: "Surpreenda-se com o corte ondulado.", preco: 14.90 },
+      { cat: "entradas", nome: "BATATA CRINKLE (G)", desc: "Surpreenda-se com o corte ondulado.", preco: 38.90 },
+      { cat: "entradas", nome: "BATATA SMILE (INDIVIDUAL)", desc: "Formatos divertidos e saborosos.", preco: 14.90 },
+      { cat: "entradas", nome: "BATATA SMILE (G)", desc: "Formatos divertidos e saborosos.", preco: 26.90 },
+      { cat: "entradas", nome: "SPECIAL FRIES (INDIVIDUAL)", desc: "Fritas com cobertura de 1ª linha: Tiras de Bacon + Muçarela OU Tiras de Bacon + Cheddar.", preco: 19.90 },
+      { cat: "entradas", nome: "SPECIAL FRIES (G)", desc: "Fritas com cobertura de 1ª linha: Tiras de Bacon + Muçarela OU Tiras de Bacon + Cheddar.", preco: 48.90 },
+      { cat: "entradas", nome: "COMODONIS BEST FRIES (INDIVIDUAL)", desc: "Cheddar, muçarela, parmesão, tiras de bacon e cebola crispy.", preco: 24.90 },
+      { cat: "entradas", nome: "COMODONIS BEST FRIES (G)", desc: "Cheddar, muçarela, parmesão, tiras de bacon e cebola crispy.", preco: 59.90 },
+
+      // PORÇÕES ARTESANAIS
+      { cat: "porcoes-artesanais", nome: "MOZZARELLA STICKS (INDIVIDUAL - 4UN)", desc: "Pedaços de muçarela cortados e empanados. Crocante por fora e derretidos por dentro.", preco: 22.90 },
+      { cat: "porcoes-artesanais", nome: "MOZZARELLA STICKS (PORÇÃO - 8UN)", desc: "Pedaços de muçarela cortados e empanados. Crocante por fora e derretidos por dentro.", preco: 39.90 },
+      { cat: "porcoes-artesanais", nome: "COMODONIS ONION RINGS (INDIVIDUAL - 5UN)", desc: "Anéis de cebola bem temperados e empanados. Acompanha Maionese Comodonis.", preco: 14.90 },
+      { cat: "porcoes-artesanais", nome: "COMODONIS ONION RINGS (TORRE)", desc: "Torre de anéis de cebola acompanhada de Maionese Comodonis.", preco: 36.90 },
+      { cat: "porcoes-artesanais", nome: "COMODONIS SPECIAL CHICKEN (INDIVIDUAL - 4UN)", desc: "100% peito de frango temperado com várias especiarias, moído e empanado.", preco: 15.90 },
+      { cat: "porcoes-artesanais", nome: "COMODONIS SPECIAL CHICKEN (G - 8UN)", desc: "100% peito de frango temperado com várias especiarias, moído e empanado.", preco: 29.90 },
+      { cat: "porcoes-artesanais", nome: "TUDO JUNTO E MISTURADO", desc: "1 Fritas Palito G + 1 Onion Rings (I) + 1 Special Chicken (I) + 1 Mozzarella Sticks (I) + 1 Pote Maionese Comodonis.", preco: 79.90 },
+
+      // LANCHE NO PRATO
+      { cat: "lanche-prato", nome: "LANCHE NO PRATO 120G", desc: "Burger 120g (Bovino, Chicken ou Veggie), salada, fritas, queijo, bacon, cheddar, ovo, cebola e cebola crispy.", preco: 42.90 },
+      { cat: "lanche-prato", nome: "LANCHE NO PRATO 200G", desc: "Burger 200g (Bovino), salada, fritas, queijo, bacon, cheddar, ovo, cebola e cebola crispy.", preco: 48.90 },
+
+      // MOLHOS EXTRA
+      { cat: "molhos", nome: "MAIONESE COMODONIS (50ML)", desc: "Alho e ervas.", preco: 4.00 },
+      { cat: "molhos", nome: "MAIONESE HEINZ (50ML)", desc: "Maionese cremosa Heinz.", preco: 5.00 },
+      { cat: "molhos", nome: "BARBECUE HEINZ (50ML)", desc: "Molho Barbecue Heinz.", preco: 5.50 },
+
+      // EXTRAS & ADICIONAIS
+      { cat: "extras", nome: "TROCAR PÃO DE GERGELIM POR AUSTRALIANO", desc: "Somente para lanches 120g.", preco: 3.90 },
+      { cat: "extras", nome: "ADICIONAL CEBOLA ROXA / TOMATE / OVO", desc: "Escolha um adicional.", preco: 3.50 },
+      { cat: "extras", nome: "ADICIONAL CEBOLA CARAMELIZADA / BACON", desc: "Escolha um adicional.", preco: 4.90 },
+      { cat: "extras", nome: "ADICIONAL PICLES", desc: "Picles fatiado.", preco: 4.90 },
+      { cat: "extras", nome: "ADICIONAL CHEDDAR", desc: "Porção de cheddar extra.", preco: 5.90 },
+      { cat: "extras", nome: "ADICIONAL ONION RINGS P", desc: "Porção pequena de anéis de cebola.", preco: 5.90 },
+      { cat: "extras", nome: "ADICIONAL CEBOLA CRISPY", desc: "Cebola crocante.", preco: 5.90 },
+      { cat: "extras", nome: "HAMBÚRGUER EXTRA 120G", desc: "Hambúrguer de 120g.", preco: 15.90 },
+      { cat: "extras", nome: "HAMBÚRGUER EXTRA 200G", desc: "Hambúrguer de 200g.", preco: 19.90 }
+    ];
+
+    let cart = [];
+    let itemEmEdicao = null;
+
+    function renderMenu() {
+      cardapio.forEach(item => {
+        const grid = document.getElementById(`${item.cat}-grid`);
+        if (!grid) return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-title">${item.nome}</div>
+          <div class="card-desc">${item.desc}</div>
+          <div class="card-bottom">
+            <span class="price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+            <button class="btn-add" onclick="handleAddItem('${item.nome}')">Adicionar</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function handleAddItem(nomeItem) {
+      const item = cardapio.find(i => i.nome === nomeItem);
+      if (item.customizable) {
+        itemEmEdicao = item;
+        document.getElementById('custom-title').innerText = item.nome;
+        document.querySelectorAll('#group-remocao input[type="checkbox"]').forEach(c => c.checked = false);
+        document.getElementById('select-ponto').selectedIndex = 0;
+        document.getElementById('select-pao').selectedIndex = 0;
+        document.getElementById('custom-modal').style.display = 'flex';
+      } else {
+        addToCart({
+          nome: item.nome,
+          preco: item.preco,
+          detalhes: []
+        });
+      }
+    }
+
+    function closeCustomModal() {
+      document.getElementById('custom-modal').style.display = 'none';
+      itemEmEdicao = null;
+    }
+
+    function confirmAddCustom() {
+      if (!itemEmEdicao) return;
+
+      let precoFinal = itemEmEdicao.preco;
+      let detalhes = [];
+
+      const ponto = document.getElementById('select-ponto').value;
+      detalhes.push(`Ponto: ${ponto}`);
+
+      const pao = document.getElementById('select-pao').value;
+      if (pao.includes('+ R$ 3,90')) {
+        precoFinal += 3.90;
+      }
+      detalhes.push(`Pão: ${pao.replace(' (+ R$ 3,90)', '')}`);
+
+      const remocaoCheckboxes = document.querySelectorAll('#group-remocao input[type="checkbox"]:checked');
+      remocaoCheckboxes.forEach(cb => detalhes.push(cb.value));
+
+      addToCart({
+        nome: itemEmEdicao.nome,
+        preco: precoFinal,
+        detalhes: detalhes
+      });
+
+      closeCustomModal();
+    }
+
+    function addToCart(produto) {
+      cart.push(produto);
+      updateCartUI();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const total = cart.reduce((acc, item) => acc + item.preco, 0);
+      document.getElementById('cart-summary').innerText = `${cart.length} item(ns) - R$ ${total.toFixed(2).replace('.', ',')}`;
+      document.getElementById('cart-total').innerText = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+
+      const container = document.getElementById('cart-items-container');
+      container.innerHTML = '';
+
+      cart.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `
+          <div class="cart-item-details">
+            <strong>${item.nome}</strong>
+            <div class="cart-item-customs">${item.detalhes.join(' | ')}</div>
+            <div>R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
+          </div>
+          <button class="btn-remove" onclick="removeFromCart(${index})">Remover</button>
+        `;
+        container.appendChild(itemDiv);
+      });
+    }
+
+    function toggleCartModal(show) {
+      document.getElementById('cart-modal').style.display = show ? 'flex' : 'none';
+    }
+
+    function sendWhatsAppOrder() {
+      if (cart.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+      }
+
+      let msg = "*NOVO PEDIDO - COMODONIS HAMBURGUERIA*\n\n";
+      cart.forEach((item, i) => {
+        msg += `*${i + 1}. ${item.nome}* - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+        if (item.detalhes.length > 0) {
+          msg += `   _${item.detalhes.join(', ')}_\n`;
+        }
+      });
+
+      const total = cart.reduce((acc, item) => acc + item.preco, 0);
+      msg += `\n*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n`;
+
+      const obs = document.getElementById('obs').value;
+      if (obs.trim() !== "") {
+        msg += `*Observações:* ${obs}\n`;
+      }
+
+      const encoded = encodeURIComponent(msg);
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, '_blank');
+    }
+
+    renderMenu();
+  </script>
+</body>
+</html>
